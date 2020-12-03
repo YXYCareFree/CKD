@@ -11,20 +11,7 @@ import UIKit
 class HomeSubjectCell: UITableViewCell {
 
     @IBOutlet weak var lblTitle: UILabel!
-    lazy var collectionView: UICollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.itemSize = CGSize(width: (screenW - 30) / 4, height: 80)
-        flowLayout.minimumLineSpacing = 0
-        flowLayout.minimumInteritemSpacing = 0
-        let v = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        v.backgroundColor = .white
-        v.delegate = self
-        v.dataSource = self
-        v.register(UINib.init(nibName: "SubjectCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "SubjectCollectionViewCellID")
-        v.showsHorizontalScrollIndicator = false
-        v.showsVerticalScrollIndicator = false
-        return v
-    }()
+    lazy var collectionView: UICollectionView = getCollectionView()
     
     var data: [SubjectModel]? {
         didSet {
@@ -51,6 +38,21 @@ class HomeSubjectCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+    
+    func getCollectionView() -> UICollectionView {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.itemSize = CGSize(width: (screenW - 30) / 4, height: 80)
+        flowLayout.minimumLineSpacing = 0
+        flowLayout.minimumInteritemSpacing = 0
+        let v = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        v.backgroundColor = .white
+        v.delegate = self
+        v.dataSource = self
+        v.register(UINib.init(nibName: "SubjectCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "SubjectCollectionViewCellID")
+        v.showsHorizontalScrollIndicator = false
+        v.showsVerticalScrollIndicator = false
+        return v
     }
 }
 

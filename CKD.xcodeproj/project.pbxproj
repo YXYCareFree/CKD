@@ -41,6 +41,9 @@
 		D2CEDEE3255A712E0020F7A8 /* CKDUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2CEDEE2255A712E0020F7A8 /* CKDUITests.swift */; };
 		D2CEDEF7255A76830020F7A8 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2CEDEF5255A76830020F7A8 /* HomeViewController.swift */; };
 		D2CEDEF8255A76830020F7A8 /* HomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D2CEDEF6255A76830020F7A8 /* HomeViewController.xib */; };
+		D2FC0A01257883EB00E7C02B /* NewsDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FC09FF257883EB00E7C02B /* NewsDetailController.swift */; };
+		D2FC0A02257883EB00E7C02B /* NewsDetailController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D2FC0A00257883EB00E7C02B /* NewsDetailController.xib */; };
+		D2FC0A04257893FE00E7C02B /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2FC0A03257893FE00E7C02B /* WebKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -104,6 +107,9 @@
 		D2CEDEE4255A712E0020F7A8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D2CEDEF5255A76830020F7A8 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		D2CEDEF6255A76830020F7A8 /* HomeViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HomeViewController.xib; sourceTree = "<group>"; };
+		D2FC09FF257883EB00E7C02B /* NewsDetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsDetailController.swift; sourceTree = "<group>"; };
+		D2FC0A00257883EB00E7C02B /* NewsDetailController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewsDetailController.xib; sourceTree = "<group>"; };
+		D2FC0A03257893FE00E7C02B /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +117,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D2FC0A04257893FE00E7C02B /* WebKit.framework in Frameworks */,
 				B9AEFCF6525F1DD2CDD14CF1 /* Pods_CKD.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -135,6 +142,7 @@
 		5074D2C5BABE9ECFDCDD3687 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D2FC0A03257893FE00E7C02B /* WebKit.framework */,
 				9E0960FA40C651871322ECCE /* Pods_CKD.framework */,
 			);
 			name = Frameworks;
@@ -337,6 +345,8 @@
 			children = (
 				D2CEDEF5255A76830020F7A8 /* HomeViewController.swift */,
 				D2CEDEF6255A76830020F7A8 /* HomeViewController.xib */,
+				D2FC09FF257883EB00E7C02B /* NewsDetailController.swift */,
+				D2FC0A00257883EB00E7C02B /* NewsDetailController.xib */,
 			);
 			path = VC;
 			sourceTree = "<group>";
@@ -452,6 +462,7 @@
 				D2CEDECA255A712E0020F7A8 /* Assets.xcassets in Resources */,
 				D24DB03F2570E6B400CF5A2F /* SubjectCollectionViewCell.xib in Resources */,
 				D2CEDEC8255A712D0020F7A8 /* Main.storyboard in Resources */,
+				D2FC0A02257883EB00E7C02B /* NewsDetailController.xib in Resources */,
 				D23EE0DE2574E524007B8600 /* VideoCell.xib in Resources */,
 				D23EE0DA2574DDBF007B8600 /* PicNewsCell.xib in Resources */,
 				D2CEDEF8255A76830020F7A8 /* HomeViewController.xib in Resources */,
@@ -530,6 +541,7 @@
 				D23EE0DD2574E524007B8600 /* VideoCell.swift in Sources */,
 				D20866E1255B90E10056C168 /* Const.swift in Sources */,
 				D227463E255BEFB60080E634 /* ToolModel.swift in Sources */,
+				D2FC0A01257883EB00E7C02B /* NewsDetailController.swift in Sources */,
 				D24DB0412570F37100CF5A2F /* SwitchControlView.swift in Sources */,
 				D227462A255BBBDA0080E634 /* HomeAPI.swift in Sources */,
 				D28DA5332575EF4B004D9E31 /* CustomTabBarController.swift in Sources */,
@@ -718,16 +730,19 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = X8C5ZZFNX6;
 				INFOPLIST_FILE = CKD/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -Xfrontend -debug-time-function-bodies";
 				PRODUCT_BUNDLE_IDENTIFIER = com.casanube.CKD;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "CKD/CKD-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
+				SWIFT_WHOLE_MODULE_OPTIMIZATION = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -738,16 +753,19 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = X8C5ZZFNX6;
 				INFOPLIST_FILE = CKD/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -Xfrontend -debug-time-function-bodies";
 				PRODUCT_BUNDLE_IDENTIFIER = com.casanube.CKD;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "CKD/CKD-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
+				SWIFT_WHOLE_MODULE_OPTIMIZATION = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

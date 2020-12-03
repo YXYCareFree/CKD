@@ -10,10 +10,13 @@ import UIKit
 import FSPagerView
 
 class HomeViewController: UIViewController {
+    
+    deinit {
+        print("deinit")
+    }
 
     @IBOutlet weak var tableView: UITableView!
 
-    var newsList: [NewsModel] = []
 
     var homeModel: HomeModel?
     
@@ -39,23 +42,29 @@ class HomeViewController: UIViewController {
         return control
     }()
     
+    var newsTypeIdx = 0
     lazy var categoryView: SwitchControlView = {
-        let v = UIView()
-        let t = SwitchControlView{ (idx) -> Void? in
-            print(idx)
+        let t = SwitchControlView{ [unowned self] (idx) -> Void in
+            self.newsTypeIdx = idx
+            self.loadMore()
         }
         return t
     }()
     
     
+    var pageStartList: [Int] = []
+    var newsList: [[NewsModel?]] = []
+
+   
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         setUI()
     }
     
 
     func setUI() {
+        
         navigationItem.title = "家云CKD"
         tableView.tableHeaderView = tableViewHeaderV
 
@@ -67,11 +76,18 @@ class HomeViewController: UIViewController {
             m.height.equalTo(25)
         }
         
+        tableView.es.addInfiniteScrolling {
+            [unowned self] in
+            self.loadMore()
+        }
+        
         tableView.es.addPullToRefresh {
             [unowned self] in
             self.getData()
         }
-        tableView.es.startPullToRefresh()
+    
+        self.getData()
+//        tableView.es.startPullToRefresh()
         tableView.estimatedRowHeight = 85
         tableView.register(HomeToolCell.self, forCellReuseIdentifier: "HomeToolCellID")
         tableView.register(UINib.init(nibName: "HomeSubjectCell", bundle: nil), forCellReuseIdentifier: "HomeSubjectCellID")
@@ -83,6 +99,23 @@ class HomeViewController: UIViewController {
         CasHTTPProvider<HomeAPI>.request(api: HomeAPI.homeData, model: HomeModel.self, suc: { (res) in
             
             self.homeModel = res
+            
+            
+            if let count = res?.informationColumnList?.count {
+                for i in 0..<count {
+                    if i == 0 {
+                        self.pageStartList.insert(2, at: 0)
+                        self.newsList.insert((res?.informationList) ?? [], at: 0)
+                    }else {
+                        self.pageStartList.insert(1, at: i)
+                        self.newsList.insert([], at: i)
+                        if i == self.newsTypeIdx {
+                            self.loadMore()
+                        }
+                    }
+                }
+            }
+            
             self.tableView.reloadData()
             
             if let list = self.homeModel?.bannerList {
@@ -99,6 +132,28 @@ class HomeViewController: UIViewController {
             
         }, fail: nil)
     }
+    
+    func loadMore() {
+        
+        CasHTTPProvider<HomeAPI>.request(api: .newsList(param: ["limit": "10", "page": pageStartList[newsTypeIdx], "informationColumnCode": homeModel?.informationColumnList?[newsTypeIdx].informationColumnCode as Any]), modelList: NewsModel.self, suc: { (res) in
+           
+            self.tableView.es.stopLoadingMore()
+            
+            if let count = res?.count{
+                if count > 0 {
+                    var data = self.newsList[self.newsTypeIdx]
+                    data.append(contentsOf: res!)
+                    self.newsList.insert(data, at: self.newsTypeIdx)
+                    self.tableView.reloadData()
+                    return
+                }
+            }
+            self.tableView.es.noticeNoMoreData()
+            
+        }) { (msg) in
+            
+        }
+    }
 }
 
 extension HomeViewController: UITableViewDataSource, UITableViewDelegate{
@@ -108,7 +163,7 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate{
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == 0 ? 2: homeModel == nil ? 0 : homeModel!.informationList!.count
+        return section == 0 ? 2: homeModel == nil ? 0 : newsList[newsTypeIdx].count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -127,16 +182,38 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate{
             }
         }
         
-        let model = homeModel?.informationList?[indexPath.row]
+        let model = newsList[newsTypeIdx][indexPath.row]
         if model?.informationType == "RESOURCE_ARTICLE" {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "PicNewsCellID", for: indexPath)
+            let cell = tableView.dequeueReusableCell(withIdentifier: "PicNewsCellID", for: indexPath) as! PicNewsCell
+            cell.imgV.setNetworkImage(urlStr: model?.informationImg)
+            cell.lblTitle.text = model?.informationTitle
+            setBottomView(model: model, view: cell.vBottom)
             return cell
         }else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "VideoCellID", for: indexPath)
+            let cell = tableView.dequeueReusableCell(withIdentifier: "VideoCellID", for: indexPath) as! VideoCell
+            cell.imgV.setNetworkImage(urlStr: model?.informationImg)
+            cell.lblTitle.text = model?.informationTitle
+            setBottomView(model: model, view: cell.vBottom)
             return cell
         }
-                
-        return UITableViewCell()
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.section == 1 {
+            let model = newsList[newsTypeIdx][indexPath.row]
+            let vc = NewsDetailController()
+            vc.id = model?.informationContentId
+            navigationController?.pushViewController(vc, animated: true)
+        }
+    }
+    
+    func setBottomView(model: NewsModel?, view: NewsBottomView) {
+        view.btnLike.setImage(UIImage.init(named: (model?.isLike!)! > 0 ? "dislike" : "dislike"), for: .normal)
+        view.btnRead.setImage(UIImage.init(named: "unread"), for: .normal)
+        view.btnCollect.setImage(UIImage.init(named: (model?.isCollection!)! > 0 ? "collect" : "collect"), for: .normal)
+        view.btnCollect.setTitle("\(model?.collectionCount ?? 0)", for: .normal)
+        view.btnRead.setTitle("\(model?.browseCount ?? 0)", for: .normal)
+        view.btnLike.setTitle("\(model?.likeCount ?? 0)", for: .normal)
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

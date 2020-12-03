@@ -10,12 +10,10 @@ import UIKit
 
 class PicNewsCell: UITableViewCell {
 
-    @IBOutlet weak var btnLike: UIView!
-    @IBOutlet weak var btnCollect: UIButton!
-    @IBOutlet weak var btnRead: UIButton!
-    @IBOutlet weak var lblAuthor: UILabel!
+
     @IBOutlet weak var lblTitle: UILabel!
     @IBOutlet weak var imgV: UIImageView!
+    @IBOutlet weak var vBottom: NewsBottomView!
     
     override func awakeFromNib() {
         super.awakeFromNib()

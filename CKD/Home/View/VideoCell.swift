@@ -12,6 +12,7 @@ class VideoCell: UITableViewCell {
 
     @IBOutlet weak var lblTitle: UILabel!
     @IBOutlet weak var imgV: UIImageView!
+    @IBOutlet weak var vBottom: NewsBottomView!
     
     override func awakeFromNib() {
         super.awakeFromNib()

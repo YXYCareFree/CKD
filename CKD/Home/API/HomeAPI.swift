@@ -48,6 +48,7 @@ extension HomeAPI: TargetType{
         case .newsDetail(_): return "RenalApp/InformationDetailsSearch"
         case .newsList(_): return "RenalApp/GetHomePageInformation"
         case .newsOperation(_): return "RenalApp/InformationOperation"
+            
         }
     }
     

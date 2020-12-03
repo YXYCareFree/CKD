@@ -11,10 +11,8 @@ import UIKit
 class SwitchControlView: UIView {
     
     var selectedIdx = 0
-    let itemClicked: (_ idx: Int) -> Void?
+    let itemClicked: (_ idx: Int) -> Void
     
-
-
     var titlesArr: [String]? {
         didSet {
             collectionView.reloadData()
@@ -37,17 +35,12 @@ class SwitchControlView: UIView {
         return v
     }()
     
-    init(titles: [String]? = nil, clicked: @escaping (_ idx: Int) -> Void?) {
-//        self.init()
+    init(titles: [String]? = nil, clicked:  @escaping (_ idx: Int) -> Void) {
         self.titlesArr = titles
         self.itemClicked = clicked
         super.init(frame: .zero)
     }
-    
-//    init() {
-//        super.init(frame: .zero)
-//    }
-//    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

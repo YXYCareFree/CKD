@@ -64,7 +64,6 @@ class HomeToolCell: UITableViewCell {
             v.snp.makeConstraints { (m) in
                 m.left.equalTo(CGFloat(15 + i * (Int(w) + 8)))
                 m.width.equalTo(w)
-//                m.height.equalTo(w * 65 / 80)
                 m.top.equalTo(12)
                 m.bottom.equalTo(-10)
             }

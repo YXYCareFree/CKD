@@ -58,7 +58,14 @@ class CasHTTPProvider<T: TargetType> {
         let _ =
         provider.rx.request(api).asObservable().subscribe(onNext: { (res) in
             if suc != nil {
-                suc!(res)
+                let obj = try? JSONSerialization.jsonObject(with: res.data, options: .allowFragments) as? NSDictionary
+                if let data = res.handleResponse(dict: obj) {
+                    if let dataType = data["dataType"] as? String {
+                        if dataType == "data" {
+                            suc!(data["data"] as Any)
+                        }
+                    }
+                }
             }
         }, onError: { (err) in
 

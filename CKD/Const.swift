@@ -40,7 +40,12 @@ extension UIImageView {
 //        print(urlStr ?? "图片地址为空")
         var url = "12"
         if let u = urlStr {
-            url = "https://registry.casanubeserver.com/casanube-file-service/casanube/file/" + u + "/download.run"
+            if u.hasPrefix("https:") {
+                url = u
+            }else{
+                url = "https://registry.casanubeserver.com/casanube-file-service/casanube/file/" + u + "/download.run"
+            }
+            
         }
         self.kf.setImage(with: .network(URL(string: url)!), placeholder: UIImage.init(named: "placeholder"), options: nil, progressBlock: nil, completionHandler: nil)
     }
