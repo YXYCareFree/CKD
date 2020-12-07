@@ -98,7 +98,6 @@ class NewsBottomView: UIView {
         btnRead.snp.makeConstraints { (m) in
             m.right.equalTo(split1.snp.left).offset(-5)
         }
-        
     }
     
 }

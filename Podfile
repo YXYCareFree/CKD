@@ -20,4 +20,7 @@ target 'CKD' do
   pod 'Kingfisher'
 #  pod 'Bugly'
 
+  pod "BMPlayer"
+
+
 end

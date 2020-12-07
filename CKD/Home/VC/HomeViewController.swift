@@ -9,7 +9,7 @@
 import UIKit
 import FSPagerView
 
-class HomeViewController: UIViewController {
+class HomeViewController: BaseViewController {
     
     deinit {
         print("deinit")
@@ -200,10 +200,16 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate{
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 1 {
+            
             let model = newsList[newsTypeIdx][indexPath.row]
-            let vc = NewsDetailController()
-            vc.id = model?.informationContentId
-            navigationController?.pushViewController(vc, animated: true)
+            if model?.informationType == "RESOURCE_ARTICLE" {
+                let vc = NewsDetailController()
+                vc.id = model?.informationContentId
+                navigationController?.pushViewController(vc, animated: true)
+            }else{
+                navigationController?.pushViewController(VideoPlayerController(id: model?.informationContentId), animated: true)
+                
+            }
         }
     }
     

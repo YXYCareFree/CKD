@@ -24,6 +24,22 @@ func PingFang(size: CGFloat) -> UIFont {
     return UIFont.init(name: "PingFang SC", size: size) ?? UIFont.systemFont(ofSize: size)
 }
 
+func createUILable(textColor: UIColor, font: UIFont, numberOfLines: Int = 1) -> UILabel {
+    let t = UILabel()
+    t.textColor = textColor
+    t.font = font
+    t.text = "--"
+    t.numberOfLines = numberOfLines
+    return t
+}
+
+func createUIButton(textColor: UIColor, font: UIFont) -> UIButton {
+    let btn = UIButton(type: .custom)
+    btn.setTitleColor(textColor, for: .normal)
+    btn.titleLabel?.font = font
+    return btn
+}
+
 let keyWindow = getKeyWindow()
 func getKeyWindow() -> UIWindow {
     let windows = UIApplication.shared.windows
