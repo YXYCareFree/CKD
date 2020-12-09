@@ -64,7 +64,6 @@ class NewsDetailController: BaseViewController {
     }
     
     func setUI() {
-        view.backgroundColor = .white
         let vBottom = UIView()
         view.addSubview(vBottom)
         vBottom.snp.makeConstraints { (m) in

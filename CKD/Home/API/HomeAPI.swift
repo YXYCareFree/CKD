@@ -38,6 +38,7 @@ enum HomeAPI {
     case newsList(param: Parameters)
     case newsDetail(param: Parameters)
     case newsOperation(param: Parameters)
+    case toolList
 }
 
 extension HomeAPI: TargetType{
@@ -48,13 +49,13 @@ extension HomeAPI: TargetType{
         case .newsDetail(_): return "RenalApp/InformationDetailsSearch"
         case .newsList(_): return "RenalApp/GetHomePageInformation"
         case .newsOperation(_): return "RenalApp/InformationOperation"
-            
+        case .toolList: return "UniversalConfig.ToolSearch"
         }
     }
     
     var task: Task{
         switch self {
-        case .homeData:
+        case .homeData, .toolList:
             return .requestPlain
         case .newsList(let param), .newsDetail(let param), .newsOperation(let param):
             return .requestParameters(parameters: param, encoding: JSONEncoding.default)

@@ -13,6 +13,9 @@ class SubjectCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var lblTitle: UILabel!
     @IBOutlet weak var imgV: UIImageView!
     
+    @IBOutlet weak var imgVWidthConstraint: NSLayoutConstraint!
+    @IBOutlet weak var imgVHeighConstraint: NSLayoutConstraint!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

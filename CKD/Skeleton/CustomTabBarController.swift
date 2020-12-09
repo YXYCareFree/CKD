@@ -38,7 +38,7 @@ class CustomTabBarController: UITabBarController {
         let health = CustomNavController.init(rootViewController: HomeViewController());
         health.setTabBar(title: "健康", norImg: "tabBar_health_nor", selImg: "tabBar_health_sel")
       
-        let find = CustomNavController.init(rootViewController: HomeViewController())
+        let find = CustomNavController.init(rootViewController: FindController())
         find.setTabBar(title: "发现", norImg: "tabBar_find_nor", selImg: "tabBar_find_sel")
        
         let tool = CustomNavController.init(rootViewController: HomeViewController())
@@ -58,7 +58,6 @@ extension CustomTabBarController: UITabBarControllerDelegate{
             let vc = FunctionController()
             vc.modalPresentationStyle = .fullScreen
             present(vc, animated: true, completion: nil)
-            print("点击了底部的➕")
             return false
         }
         return true

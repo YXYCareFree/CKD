@@ -11,7 +11,7 @@ import UIKit
 class SwitchControlView: UIView {
     
     var selectedIdx = 0
-    let itemClicked: (_ idx: Int) -> Void
+    var itemClicked: (_ idx: Int) -> Void
     
     var titlesArr: [String]? {
         didSet {
@@ -42,7 +42,8 @@ class SwitchControlView: UIView {
     }
 
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        self.itemClicked = {idx in}
+        super.init(coder: coder)
     }
     
     override func layoutSubviews() {

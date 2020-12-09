@@ -52,7 +52,7 @@ func getKeyWindow() -> UIWindow {
 }
 
 extension UIImageView {
-    func setNetworkImage(urlStr:String?) {
+    func setNetworkImage(urlStr:String?, placeholder: String = "placeholder") {
 //        print(urlStr ?? "图片地址为空")
         var url = "12"
         if let u = urlStr {
@@ -63,7 +63,7 @@ extension UIImageView {
             }
             
         }
-        self.kf.setImage(with: .network(URL(string: url)!), placeholder: UIImage.init(named: "placeholder"), options: nil, progressBlock: nil, completionHandler: nil)
+        self.kf.setImage(with: .network(URL(string: url)!), placeholder: UIImage.init(named: placeholder), options: nil, progressBlock: nil, completionHandler: nil)
     }
 }
 

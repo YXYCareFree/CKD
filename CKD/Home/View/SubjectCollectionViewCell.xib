@@ -43,6 +43,8 @@
             <size key="customSize" width="140" height="88"/>
             <connections>
                 <outlet property="imgV" destination="2Iu-FT-jRv" id="efC-OQ-RE6"/>
+                <outlet property="imgVHeighConstraint" destination="thr-RJ-E1T" id="8eb-Ta-c8E"/>
+                <outlet property="imgVWidthConstraint" destination="Vfd-dE-uwT" id="AIC-T9-E16"/>
                 <outlet property="lblTitle" destination="d3i-T8-wQR" id="GeW-wT-ebj"/>
             </connections>
             <point key="canvasLocation" x="141" y="127"/>

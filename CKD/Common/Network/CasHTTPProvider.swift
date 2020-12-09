@@ -18,7 +18,7 @@ import RxSwift
 class CasHTTPProvider<T: TargetType> {
     
     static func request<M: HandyJSON>(api: T, model: M.Type, suc: ((_ suc: M?) -> Void)? = nil, fail: ((_ res: Any) -> Void)? = nil){
-
+        
         let provider = MoyaProvider<T>(plugins: [CasHTTPProviderPlugin()])
         let _ =
         provider.rx.request(api).asObservable().mapModel(model).subscribe(onNext: { (res) in
@@ -52,19 +52,28 @@ class CasHTTPProvider<T: TargetType> {
         }
     }
     
-    static func request(api: T, suc: ((_ suc: Any) -> Void)? = nil, fail: ((_ res: Any) -> Void)? = nil){
+    static func request(api: T, suc: ((_ suc: AnyObject) -> Void)? = nil, fail: ((_ res: AnyObject) -> Void)? = nil){
 
         let provider = MoyaProvider<T>(plugins: [CasHTTPProviderPlugin()])
         let _ =
         provider.rx.request(api).asObservable().subscribe(onNext: { (res) in
+            let obj = try? JSONSerialization.jsonObject(with: res.data, options: .allowFragments) as? NSDictionary
+            print("\(api.path)")
+            
+//            let str = String(data: res.data, encoding: .utf8)
+print(obj)
             if suc != nil {
-                let obj = try? JSONSerialization.jsonObject(with: res.data, options: .allowFragments) as? NSDictionary
                 if let data = res.handleResponse(dict: obj) {
                     if let dataType = data["dataType"] as? String {
                         if dataType == "data" {
-                            suc!(data["data"] as Any)
+                            suc!(data["data"] as AnyObject)
+                        }
+                        if dataType == "list" {
+                            suc!(data["dataList"] as AnyObject)
                         }
                     }
+                }else{
+                    fail!(obj?["describe"] as AnyObject)
                 }
             }
         }, onError: { (err) in
@@ -78,29 +87,31 @@ class CasHTTPProvider<T: TargetType> {
 }
 
 class CasHTTPProviderPlugin: PluginType {
+
+    let deviceId = UIDevice.current.identifierForVendor?.uuidString
     
     func prepare(_ request: URLRequest, target: TargetType) -> URLRequest {
 
         DispatchQueue.main.async {
             HUD.show(.labeledProgress(title: "", subtitle: "正在加载中..."))
         }
+        
         var param: [String: Any] = [:]
-        if request.httpBody == nil {
-            param["deviceId"] = "124"
-        }else{
-            do {
-                let jsonObject = try JSONSerialization.jsonObject(with: request.httpBody ?? Data(), options: .allowFragments)
-                if let json = jsonObject as? [String: Any] {
-                    param = json
-                    param["deviceId"] = "123"
-                }
-            } catch let e {
-                print(e)
+       
+        do {
+            let jsonObject = try JSONSerialization.jsonObject(with: request.httpBody ?? Data(), options: .allowFragments)
+            if let json = jsonObject as? [String: Any] {
+                param = json
             }
+        } catch let e {
+            print(e)
         }
+        param["deviceId"] = deviceId
+        param["operate_way"] = "4"
         var resq = request
         resq.httpBody = try! JSONSerialization.data(withJSONObject: param, options: .prettyPrinted)
-        return resq;
+        resq.url = URL(string: "https://\(resq.url!.host!)\(resq.url!.path.replacingOccurrences(of: ".", with: "/"))")
+        return resq
     }
     
     func willSend(_ request: RequestType, target: TargetType) {
