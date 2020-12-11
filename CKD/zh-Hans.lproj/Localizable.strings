@@ -1,0 +1,11 @@
+/* 
+  Localizable.strings
+  CKD
+
+  Created by casanube on 2020/12/11.
+  Copyright © 2020 casanube. All rights reserved.
+*/
+"Release to refresh" = "释放刷新";
+"Pull to refresh" = "下拉刷新";
+"Loading..." = "加载中...";
+"No more data" = "我也是有底线的";

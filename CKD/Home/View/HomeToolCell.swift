@@ -17,7 +17,8 @@ class HomeToolCell: UITableViewCell {
         }
     }
     
-
+    var clickedCallBack: ((_ model: ToolModel) -> Void)?
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -50,8 +51,10 @@ class HomeToolCell: UITableViewCell {
         
         for i in 0..<data!.count {
             let model = data![i]
-            let v = HomeToolView(title: model.toolName, imgUrl: model.toolImg, color: titleColors[i],clicked: {
-                print("点击了\(model.toolName!)")
+            let v = HomeToolView(title: model.toolName, imgUrl: model.toolImg, color: titleColors[i],clicked: { [unowned self] in
+                if self.clickedCallBack != nil {
+                    self.clickedCallBack!(model)
+                }
             })
             let layer = CAGradientLayer()
             layer.locations = [0, 1]

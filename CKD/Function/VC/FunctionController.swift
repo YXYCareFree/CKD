@@ -14,7 +14,9 @@ class FunctionController: BaseViewController {
         let layout = UICollectionViewFlowLayout()
         layout.minimumInteritemSpacing = 0
         layout.minimumLineSpacing = 0
-        layout.itemSize = CGSize(width: screenW / 3 , height: 110)
+//        layout.itemSize = CGSize(width: screenW / 3 , height: 110)
+        layout.itemSize = UICollectionViewFlowLayout.automaticSize
+        layout.estimatedItemSize = CGSize(width: screenW / 3, height: 20)
         let v = UICollectionView(frame: .zero, collectionViewLayout: layout)
         v.backgroundColor = .clear
         v.showsVerticalScrollIndicator = false
@@ -114,6 +116,6 @@ extension FunctionController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let model = data![indexPath.item]
-        print(model?.toolName!)
+        print(model?.toolName! as Any)
     }
 }

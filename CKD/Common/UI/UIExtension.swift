@@ -46,3 +46,35 @@ extension UIViewController {
         tabBarItem.selectedImage = UIImage.init(named: selImg)?.withRenderingMode(.alwaysOriginal)
     }
 }
+
+let empty = UIImageView(image: UIImage.init(named: "empty"))
+
+extension UITableView {
+    
+    var emptyView: UIView?{
+        set{
+            objc_setAssociatedObject(self, UnsafeRawPointer.init(bitPattern: "emptyView".hashValue)!, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+        
+        get{
+            var t = objc_getAssociatedObject(self, UnsafeRawPointer.init(bitPattern: "emptyView".hashValue)!) as? UIView
+            if t == nil {
+                t = empty
+            }
+            addSubview(t!)
+            t!.snp.remakeConstraints { (m) in
+                m.center.equalTo(self)
+            }
+            return t
+        }
+    }
+    
+//    public var es: ES<UITableView>{
+//        didSet{
+//            
+//        }
+//    }
+    
+    
+
+}

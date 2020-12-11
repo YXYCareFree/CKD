@@ -15,10 +15,12 @@ import RxSwift
 
 //typealias CasHTTPSUC = type expression
 
+var logParam: [String: Any] = [:]
+
+
 class CasHTTPProvider<T: TargetType> {
     
     static func request<M: HandyJSON>(api: T, model: M.Type, suc: ((_ suc: M?) -> Void)? = nil, fail: ((_ res: Any) -> Void)? = nil){
-        
         let provider = MoyaProvider<T>(plugins: [CasHTTPProviderPlugin()])
         let _ =
         provider.rx.request(api).asObservable().mapModel(model).subscribe(onNext: { (res) in
@@ -58,10 +60,6 @@ class CasHTTPProvider<T: TargetType> {
         let _ =
         provider.rx.request(api).asObservable().subscribe(onNext: { (res) in
             let obj = try? JSONSerialization.jsonObject(with: res.data, options: .allowFragments) as? NSDictionary
-            print("\(api.path)")
-            
-//            let str = String(data: res.data, encoding: .utf8)
-print(obj)
             if suc != nil {
                 if let data = res.handleResponse(dict: obj) {
                     if let dataType = data["dataType"] as? String {
@@ -119,13 +117,24 @@ class CasHTTPProviderPlugin: PluginType {
     }
     
     func didReceive(_ result: Result<Response, MoyaError>, target: TargetType) {
+        print("\n\(target.baseURL)\(target.path)")
+        switch target.task {
+            case .requestParameters(let data, _): print(data)
+            default : break
+        }
+        
+        switch result {
+            case .success(let res):
+                let str = String(data: res.data, encoding: .utf8)
+                print(str ?? "解析数据失败")
+            print("\n")
+            case .failure(let err): print("请求出错\(err)")
+        }
         DispatchQueue.main.async {
             HUD.flash(.success)
             HUD.hide()
         }
-    }
-    
-    
+    }    
 }
 
 

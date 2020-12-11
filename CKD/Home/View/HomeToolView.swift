@@ -9,14 +9,13 @@
 import UIKit
 
 class HomeToolView: UIView {
+    
     var _title: String
     var _imgUrl: String
-    var clickBlcok: () -> Void?
+    var clickBlcok: () -> Void
     var titleColor: UIColor = .black
-    
-    
-    
-    init(title: String?, imgUrl: String?, color: UIColor,clicked: @escaping () -> Void?) {
+        
+    init(title: String?, imgUrl: String?, color: UIColor,clicked: @escaping () -> Void) {
         _title = title ?? ""
         _imgUrl = imgUrl ?? "https://www.baidu.com"
         clickBlcok = clicked
@@ -61,10 +60,6 @@ class HomeToolView: UIView {
     }
     
     @objc func clicked(){
-        if clickBlcok != nil {
-            clickBlcok()
-        }
+        clickBlcok()
     }
-    
-    
 }

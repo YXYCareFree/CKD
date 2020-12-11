@@ -22,9 +22,10 @@ class SwitchControlView: UIView {
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 0
+        layout.minimumInteritemSpacing = 0
         layout.scrollDirection = .horizontal
         layout.itemSize = UICollectionViewFlowLayout.automaticSize
-        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        layout.estimatedItemSize = CGSize(width: 100, height: 30)
         let v = UICollectionView.init(frame: .zero, collectionViewLayout: layout)
         v.register(SwitchControlCell.self, forCellWithReuseIdentifier: "SwitchControlCellID")
         v.delegate = self
@@ -53,7 +54,6 @@ class SwitchControlView: UIView {
             m.edges.equalTo(self)
         }
     }
-
 }
 
 extension SwitchControlView: UICollectionViewDataSource, UICollectionViewDelegate {
@@ -71,9 +71,7 @@ extension SwitchControlView: UICollectionViewDataSource, UICollectionViewDelegat
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        if itemClicked != nil {
-            itemClicked(indexPath.item)
-        }
+        itemClicked(indexPath.item)
         
         if selectedIdx == indexPath.item {
             return

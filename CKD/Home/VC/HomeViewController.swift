@@ -75,19 +75,18 @@ class HomeViewController: BaseViewController {
             m.bottom.equalTo(0)
             m.height.equalTo(25)
         }
-        
-        tableView.es.addInfiniteScrolling {
-            [unowned self] in
-            self.loadMore()
-        }
-        
+                
         tableView.es.addPullToRefresh {
             [unowned self] in
             self.getData()
         }
+        tableView.es.startPullToRefresh()
+
+        tableView.es.addInfiniteScrolling {
+            [unowned self] in
+            self.loadMore()
+        }
     
-        self.getData()
-//        tableView.es.startPullToRefresh()
         tableView.estimatedRowHeight = 85
         tableView.register(HomeToolCell.self, forCellReuseIdentifier: "HomeToolCellID")
         tableView.register(UINib.init(nibName: "HomeSubjectCell", bundle: nil), forCellReuseIdentifier: "HomeSubjectCellID")
@@ -97,10 +96,7 @@ class HomeViewController: BaseViewController {
     
     func getData() {
         CasHTTPProvider<HomeAPI>.request(api: HomeAPI.homeData, model: HomeModel.self, suc: { (res) in
-            
             self.homeModel = res
-            
-            
             if let count = res?.informationColumnList?.count {
                 for i in 0..<count {
                     if i == 0 {
@@ -134,7 +130,10 @@ class HomeViewController: BaseViewController {
     }
     
     func loadMore() {
-        
+        if self.newsList[newsTypeIdx].count > 0 {
+            self.tableView.reloadData()
+            return
+        }
         CasHTTPProvider<HomeAPI>.request(api: .newsList(param: ["limit": "10", "page": pageStartList[newsTypeIdx], "informationColumnCode": homeModel?.informationColumnList?[newsTypeIdx].informationColumnCode as Any]), modelList: NewsModel.self, suc: { (res) in
            
             self.tableView.es.stopLoadingMore()
@@ -143,7 +142,7 @@ class HomeViewController: BaseViewController {
                 if count > 0 {
                     var data = self.newsList[self.newsTypeIdx]
                     data.append(contentsOf: res!)
-                    self.newsList.insert(data, at: self.newsTypeIdx)
+                    self.newsList.replaceSubrange(self.newsTypeIdx...self.newsTypeIdx, with: repeatElement(data, count: 1))
                     self.tableView.reloadData()
                     return
                 }
@@ -154,6 +153,13 @@ class HomeViewController: BaseViewController {
             
         }
     }
+    
+    func handleToolClicked(model: ToolModel) {
+        if model.toolJumpType! == "h5" {
+            navigationController?.pushViewController(WebViewController(title: model.toolName!, url: model.toolJumpUrl!), animated: true)
+        }
+    }
+    
 }
 
 extension HomeViewController: UITableViewDataSource, UITableViewDelegate{
@@ -173,6 +179,10 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate{
             if row == 0 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "HomeToolCellID", for: indexPath) as! HomeToolCell
                 cell.data = homeModel?.toolList
+                cell.clickedCallBack = { [unowned self] model in
+                    print("点击了\(model.toolName!)")
+                    self.handleToolClicked(model: model)
+                }
                 return cell
             }
             if row == 1 {
@@ -230,7 +240,7 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate{
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return section == 0 ? 0 : 50
+        return section == 0 ? 0 : 35
     }
 }
 
